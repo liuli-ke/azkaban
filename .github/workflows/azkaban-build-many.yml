@@ -1,0 +1,149 @@
+name: build-azkaban-many
+
+on:
+  workflow_dispatch:
+    inputs:
+      versions:
+        description: 'Azkaban 版本号列表（逗号分隔，例如 3.84.21,3.84.8,3.84.0）'
+        required: true
+        type: string
+        default: '3.84.21'
+      gh_proxy:
+        description: 'GitHub 代理前缀（可选，例如 https://v4.gh-proxy.org/）'
+        required: false
+        type: string
+        default: ''
+      gradle_proxy_url:
+        description: 'Gradle 发行包镜像基础 URL（可选，例如 https://mirrors.cloud.tencent.com/gradle）'
+        required: false
+        type: string
+        default: ''
+      node_mirror_root:
+        description: 'Node.js 镜像根目录（可选，例如 https://registry.npmmirror.com/-/binary/node/）'
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  # 将版本列表解析为 JSON 数组，供矩阵使用
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      versions_json: ${{ steps.set-versions.outputs.versions_json }}
+    steps:
+      - id: set-versions
+        run: |
+          VERSIONS_INPUT="${{ github.event.inputs.versions }}"
+          # 去除前后空格，将逗号分隔转为 JSON 数组
+          VERSIONS_JSON=$(echo "$VERSIONS_INPUT" | sed 's/ *, */,/g' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | awk -F',' '{printf "["; for(i=1;i<=NF;i++){printf "%s\"%s\"", (i>1?",":""), $i}; print "]"}')
+          echo "versions_json=$VERSIONS_JSON" >> $GITHUB_OUTPUT
+          echo "解析出的版本列表: $VERSIONS_JSON"
+
+  build:
+    needs: prepare
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: ${{ fromJSON(needs.prepare.outputs.versions_json) }}
+    permissions:
+      contents: write
+
+    steps:
+      # 下载 Azkaban 源码
+      - name: 下载源码（版本 ${{ matrix.version }}）
+        run: |
+          VERSION="${{ matrix.version }}"
+          GH_PROXY="${{ github.event.inputs.gh_proxy }}"
+          if [ -n "$GH_PROXY" ]; then
+            DOWNLOAD_URL="${GH_PROXY}https://github.com/azkaban/azkaban/archive/refs/tags/${VERSION}.tar.gz"
+          else
+            DOWNLOAD_URL="https://github.com/azkaban/azkaban/archive/refs/tags/${VERSION}.tar.gz"
+          fi
+          echo "下载源码包: $DOWNLOAD_URL"
+          wget -O "${VERSION}.tar.gz" "$DOWNLOAD_URL"
+          tar -zxf "${VERSION}.tar.gz"
+          echo "SRC_DIR=azkaban-${VERSION}" >> $GITHUB_ENV
+          echo "源码目录: azkaban-${VERSION}"
+
+      - name: 设置 JDK 8
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+          cache: 'gradle'
+          cache-dependency-path: |
+            **/*.gradle*
+            **/gradle-wrapper.properties
+
+      - name: 修改构建配置（版本 ${{ matrix.version }}）
+        working-directory: ${{ env.SRC_DIR }}
+        run: |
+          VERSION="${{ matrix.version }}"
+          GRADLE_PROXY="${{ github.event.inputs.gradle_proxy_url }}"
+          NODE_MIRROR="${{ github.event.inputs.node_mirror_root }}"
+
+          # 固定版本号
+          if ! grep -q "^version=" gradle.properties 2>/dev/null; then
+            echo "version=${VERSION}" >> gradle.properties
+          else
+            sed -i "s/^version=.*/version=${VERSION}/" gradle.properties
+          fi
+          sed -i '/^snapshotSuffix=/d' gradle.properties
+          echo "snapshotSuffix=" >> gradle.properties
+
+          # 禁用 semver-git
+          sed -i 's/^apply plugin: .com.cinnober.gradle.semver-git./\/\/ &/' build.gradle
+
+          # 修改 Gradle Wrapper 下载地址
+          if [ -n "$GRADLE_PROXY" ]; then
+            echo "使用 Gradle 镜像: $GRADLE_PROXY"
+            sed -i "s|https\\\://services.gradle.org/distributions|${GRADLE_PROXY}|g" gradle/wrapper/gradle-wrapper.properties
+          else
+            echo "使用 Gradle 官方源"
+          fi
+
+          # 修改 Node.js 下载源
+          if [ -n "$NODE_MIRROR" ]; then
+            echo "使用 Node 镜像: $NODE_MIRROR"
+            sed -i "s|distBaseUrl = 'https://nodejs.org/dist'|distBaseUrl = '${NODE_MIRROR}'|g" azkaban-web-server/build.gradle
+          else
+            echo "使用 Node 官方源"
+          fi
+
+      - name: 执行 Gradle 构建（版本 ${{ matrix.version }}）
+        working-directory: ${{ env.SRC_DIR }}
+        run: ./gradlew distTar --no-daemon
+
+      - name: 收集产物（版本 ${{ matrix.version }}）
+        run: |
+          mkdir -p artifacts
+          find "${{ env.SRC_DIR }}" -path "*/build/distributions/*.tar.gz" -type f -exec cp {} artifacts/ \;
+          echo "独立包列表："
+          ls -lh artifacts/
+
+      - name: 打包总压缩包并生成 MD5（版本 ${{ matrix.version }}）
+        run: |
+          cd artifacts
+          VERSION="${{ matrix.version }}"
+          tar -czf "azkaban-${VERSION}.tar.gz" *.tar.gz
+          md5sum *.tar.gz > md5sum.txt
+          echo "总包和校验文件已生成"
+
+      - name: 创建或更新 Release（版本 ${{ matrix.version }}）
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ matrix.version }}
+          name: ${{ matrix.version }}
+          body: |
+            ## Azkaban ${{ matrix.version }} 构建包
+            - 包含所有子模块的独立 tar.gz
+            - 总压缩包：azkaban-${{ matrix.version }}.tar.gz
+            - MD5 校验文件：md5sum.txt
+          files: |
+            artifacts/*.tar.gz
+            artifacts/azkaban-${{ matrix.version }}.tar.gz
+            artifacts/md5sum.txt
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
