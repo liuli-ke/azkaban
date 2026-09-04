@@ -112,7 +112,13 @@ jobs:
 
       - name: 执行 Gradle 构建（版本 ${{ matrix.version }}）
         working-directory: ${{ env.SRC_DIR }}
-        run: ./gradlew distTar --no-daemon
+        run: ./gradlew distTar --no-daemon --info
+
+      - name: 打印参数
+        run: |
+          echo "VERSION=$VERSION"
+          echo "GRADLE_PROXY=$GRADLE_PROXY"
+          echo "NODE_MIRROR=$NODE_MIRROR"
 
       - name: 收集产物（版本 ${{ matrix.version }}）
         run: |
