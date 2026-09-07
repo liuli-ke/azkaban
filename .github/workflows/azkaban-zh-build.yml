@@ -1,0 +1,109 @@
+name: azkaban-zh-build
+
+on:
+  workflow_dispatch:   # 手动触发，无需输入参数
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 设置版本号
+        id: params
+        run: |
+          VERSION="3.90.0"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "版本号: $VERSION"
+
+      # 新增：检出当前仓库（包含自定义 build.gradle）
+      - name: 检出当前仓库（包含自定义 build.gradle）
+        uses: actions/checkout@v4
+        with:
+          path: my-repo   # 将当前仓库检出到子目录 my-repo
+
+      - name: 克隆 Azkaban 仓库并切换分支
+        run: |
+          git clone https://github.com/zhaoyansheng163/azkaban.git
+          cd azkaban
+          git checkout release${{ env.VERSION }}
+          echo "SRC_DIR=azkaban" >> $GITHUB_ENV
+
+      # 新增：用当前仓库的 build.gradle 覆盖克隆项目的根目录 build.gradle
+      - name: 用当前仓库的 build.gradle 替换克隆项目的 build.gradle
+        run: |
+          cp my-repo/build.gradle azkaban/build.gradle
+          echo "已替换 build.gradle"
+
+      - name: 设置 JDK 8
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+          cache: 'gradle'
+          cache-dependency-path: |
+            **/*.gradle*
+            **/gradle-wrapper.properties
+
+      - name: 修改构建配置
+        working-directory: ${{ env.SRC_DIR }}
+        run: |
+          # 固定版本号
+          if ! grep -q "^version=" gradle.properties 2>/dev/null; then
+            echo "version=${VERSION}" >> gradle.properties
+          else
+            sed -i "s/^version=.*/version=${VERSION}/" gradle.properties
+          fi
+          sed -i '/^snapshotSuffix=/d' gradle.properties
+          echo "snapshotSuffix=" >> gradle.properties
+
+          # 禁用 semver-git
+          sed -i 's/^apply plugin: .com.cinnober.gradle.semver-git./\/\/ &/' build.gradle
+
+          # （可选）若需使用 Gradle/Node 镜像，可在此处添加逻辑，当前使用官方源
+        env:
+          VERSION: ${{ env.VERSION }}
+
+      - name: 执行 Gradle 构建
+        working-directory: ${{ env.SRC_DIR }}
+        run: ./gradlew distTar --no-daemon
+
+      - name: 收集产物
+        run: |
+          mkdir -p artifacts
+          find "${{ env.SRC_DIR }}" -path "*/build/distributions/*.tar.gz" -type f -exec cp {} artifacts/ \;
+          echo "独立包列表："
+          ls -lh artifacts/
+
+      - name: 打包总压缩包并生成 MD5
+        run: |
+          cd artifacts
+          tar -czf "azkaban-${VERSION}.tar.gz" *.tar.gz
+          md5sum *.tar.gz > md5sum.txt
+          echo "总包和校验文件已生成"
+        env:
+          VERSION: ${{ env.VERSION }}
+
+      - name: 创建 Release 并上传附件
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: zh-${{ env.VERSION }}
+          name: zh-${{ env.VERSION }}
+          body: |
+            ## Azkaban ${{ env.VERSION }} 构建包（基于 https://github.com/zhaoyansheng163/azkaban）
+            
+            > 由于原仓库使用了私有的maven地址，构建会报错，所有这里使用当前项目的 build.gradle
+            > build.gradle就是把原仓库的maven配置地址去掉了
+            
+            - 包含所有子模块的独立 tar.gz
+            - 总压缩包：azkaban-${{ env.VERSION }}.tar.gz
+            - MD5 校验文件：md5sum.txt
+          files: |
+            artifacts/*.tar.gz
+            artifacts/azkaban-${{ env.VERSION }}.tar.gz
+            artifacts/md5sum.txt
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
