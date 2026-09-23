@@ -6,8 +6,23 @@ on:
       branch:
         description: '要构建的当前仓库分支，例如 main、release3.90.0'
         required: true
-        default: 'azkaban-3.90.0'
+        default: 'main'
         type: string
+      version:
+        description: 'Azkaban 版本号（例如 3.90.0）'
+        required: true
+        default: '3.90.0'
+        type: string
+      gradle_proxy_url:
+        description: 'Gradle 发行包镜像基础 URL（可选，例如 https://mirrors.cloud.tencent.com/gradle）'
+        required: false
+        type: string
+        default: ''
+      node_mirror_root:
+        description: 'Node.js 镜像根目录（可选，例如 https://registry.npmmirror.com/-/binary/node/）'
+        required: false
+        type: string
+        default: ''
 
 jobs:
   build:
@@ -19,21 +34,27 @@ jobs:
       - name: 设置版本号
         id: params
         run: |
-          VERSION="3.90.0"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "版本号: $VERSION"
+          VERSION="${{ inputs.version }}"
+          BRANCH="${{ inputs.branch }}"
+          GRADLE_PROXY="${{ inputs.gradle_proxy_url }}"
+          NODE_MIRROR="${{ inputs.node_mirror_root }}"
 
-      - name: 生成安全分支名
-        id: vars
-        env:
-          INPUT_BRANCH: ${{ inputs.branch }}
-        run: |
-          SAFE_BRANCH=$(echo "$INPUT_BRANCH" | sed 's#[^A-Za-z0-9._-]#-#g')
-          echo "safe_branch=$SAFE_BRANCH" >> $GITHUB_OUTPUT
+          # 生成安全分支名，用于 tag
+          SAFE_BRANCH=$(echo "$BRANCH" | sed 's#[^A-Za-z0-9._-]#-#g')
+
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "BRANCH=$BRANCH" >> $GITHUB_ENV
+          echo "GRADLE_PROXY=$GRADLE_PROXY" >> $GITHUB_ENV
+          echo "NODE_MIRROR=$NODE_MIRROR" >> $GITHUB_ENV
           echo "SAFE_BRANCH=$SAFE_BRANCH" >> $GITHUB_ENV
-          echo "构建分支: $INPUT_BRANCH"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "safe_branch=$SAFE_BRANCH" >> $GITHUB_OUTPUT
+
+          echo "版本号: $VERSION"
+          echo "构建分支: $BRANCH"
           echo "安全分支名: $SAFE_BRANCH"
+          echo "GRADLE_PROXY: ${GRADLE_PROXY:-<空>}"
+          echo "NODE_MIRROR: ${NODE_MIRROR:-<空>}"
 
       - name: 检出当前仓库指定分支
         uses: actions/checkout@v4
@@ -52,10 +73,8 @@ jobs:
             **/gradle-wrapper.properties
 
       - name: 修改构建配置
-        env:
-          VERSION: ${{ steps.params.outputs.version }}
         run: |
-          # 固定版本号
+          # 1) 固定版本号
           if ! grep -q "^version=" gradle.properties 2>/dev/null; then
             echo "version=${VERSION}" >> gradle.properties
           else
@@ -64,13 +83,39 @@ jobs:
           sed -i '/^snapshotSuffix=/d' gradle.properties
           echo "snapshotSuffix=" >> gradle.properties
 
-          # 禁用 semver-git
+          # 2) 禁用 semver-git
           sed -i 's/^apply plugin: .com.cinnober.gradle.semver-git./\/\/ &/' build.gradle
 
+          # 3) 如果指定了 Gradle 镜像，替换 gradle-wrapper.properties
+          if [ -n "$GRADLE_PROXY" ]; then
+            echo "使用 Gradle 镜像: $GRADLE_PROXY"
+            sed -i "s|https\\\://services.gradle.org/distributions|${GRADLE_PROXY}|g" gradle/wrapper/gradle-wrapper.properties
+          else
+            echo "使用 Gradle 官方源"
+          fi
+
+          # 4) 如果指定了 Node 镜像，替换 azkaban-web-server/build.gradle 的 distBaseUrl
+          if [ -n "$NODE_MIRROR" ]; then
+            echo "使用 Node 镜像: $NODE_MIRROR"
+            # 兜底：确保 distBaseUrl 行存在；若不存在就新增到 node {} 块内
+            if grep -q "distBaseUrl" azkaban-web-server/build.gradle; then
+              sed -i "s|distBaseUrl = '.*'|distBaseUrl = '${NODE_MIRROR}'|g" azkaban-web-server/build.gradle
+            else
+              echo "警告：azkaban-web-server/build.gradle 未找到 distBaseUrl，跳过 Node 镜像替换"
+            fi
+          else
+            echo "使用 Node 官方源（可能会被 403 拒绝）"
+          fi
+        env:
+          VERSION: ${{ env.VERSION }}
+          GRADLE_PROXY: ${{ env.GRADLE_PROXY }}
+          NODE_MIRROR: ${{ env.NODE_MIRROR }}
+
+      - name: 赋予 gradlew 可执行权限
+        run: chmod +x gradlew
+
       - name: 执行 Gradle 构建
-        run: |
-          chmod +x gradlew
-          ./gradlew distTar --no-daemon
+        run: ./gradlew distTar --no-daemon
 
       - name: 收集产物
         run: |
@@ -91,12 +136,14 @@ jobs:
       - name: 创建 Release 并上传附件
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: zh-${{ steps.params.outputs.version }}-${{ steps.vars.outputs.safe_branch }}
-          name: zh-${{ steps.params.outputs.version }}-${{ steps.vars.outputs.safe_branch }}
+          tag_name: zh-${{ steps.params.outputs.version }}-${{ steps.params.outputs.safe_branch }}
+          name: zh-${{ steps.params.outputs.version }}-${{ steps.params.outputs.safe_branch }}
           body: |
-            ## Azkaban ${{ steps.params.outputs.version }} 构建包（当前仓库分支：${{ inputs.branch }}）
+            ## Azkaban ${{ steps.params.outputs.version }} 构建包（分支：${{ inputs.branch }}）
 
             - 构建分支：${{ inputs.branch }}
+            - Node 镜像：${{ inputs.node_mirror_root || '官方源' }}
+            - Gradle 镜像：${{ inputs.gradle_proxy_url || '官方源' }}
             - 包含所有子模块的独立 tar.gz
             - 总压缩包：azkaban-${{ steps.params.outputs.version }}.tar.gz
             - MD5 校验文件：md5sum
