@@ -18,23 +18,23 @@
 
 <div class="container-full container-fill" id="graphView">
   <div class="graph-sidebar-open" id="open-joblist-btn">
-    <span class="glyphicon glyphicon-th-list" title="Open Job List Panel"></span>
+    <span class="glyphicon glyphicon-th-list" title="打开作业列表面板"></span>
   </div>
   <div class="graph-sidebar-float">
     <div class="panel panel-default" id="joblist-panel">
       <div class="panel-heading">
-        <div class="graph-sidebar-close" id="close-btn" title="Close Panel"><span
+        <div class="graph-sidebar-close" id="close-btn" title="关闭面板"><span
             class="glyphicon glyphicon-remove"></span></div>
         <div class="graph-sidebar-search">
-          <input id="filter" type="text" placeholder="Job Filter" class="form-control input-sm">
+          <input id="filter" type="text" placeholder="作业筛选" class="form-control input-sm">
         </div>
       </div>
       <div id="joblist" class="graph-sidebar-list"></div>
       <div class="panel-footer">
-        <button type="button" class="btn btn-sm btn-default" id="resetPanZoomBtn">Reset Pan Zoom
+        <button type="button" class="btn btn-sm btn-default" id="resetPanZoomBtn">重置平移缩放
         </button>
         <button type="button" class="btn btn-sm btn-default" id="autoPanZoomBtn"
-                data-toggle="button">Auto Pan Zoom
+                data-toggle="button">自动平移缩放
         </button>
       </div>
     </div><!-- /.panel -->

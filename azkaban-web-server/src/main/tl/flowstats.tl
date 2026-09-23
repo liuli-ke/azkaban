@@ -10,8 +10,8 @@
 
 {?warnings}
   <div class="alert alert-warning">
-    <h4>Warnings</h4>
-    <p>These stats may have reduced accuracy due to the following missing information:</p>
+    <h4>警告</h4>
+    <p>由于缺少以下信息，这些统计数据的准确性可能会降低：</p>
     <ul>
       {#warnings}
         <li>{.}</li>
@@ -22,32 +22,32 @@
 
 <div class="row">
   <div class="col-xs-12">
-    <h4>Resources</h4>
+    <h4>资源</h4>
     <table class="table table-bordered table-condensed table-striped">
       <thead>
       <tr>
-        <th class="property-key">Resource</th>
-        <th class="property-key">Value</th>
-        <th>Job Name</th>
+        <th class="property-key">资源</th>
+        <th class="property-key">值</th>
+        <th>作业名称</th>
       </tr>
       </thead>
       <tbody>
       <tr>
-        <td class="property-key">Max Map Slots</td>
+        <td class="property-key">最大 Map 槽位数</td>
         <td>{stats.mapSlots.max}</td>
         <td>{stats.mapSlots.job}</td>
       </tr>
       <tr>
-        <td class="property-key">Max Reduce Slots</td>
+        <td class="property-key">最大 Reduce 槽位数</td>
         <td>{stats.reduceSlots.max}</td>
         <td>{stats.reduceSlots.job}</td>
       </tr>
       <tr>
-        <td class="property-key">Total Map Slots</td>
+        <td class="property-key">总 Map 槽位数</td>
         <td colspan="2">{stats.totalMapSlots}</td>
       </tr>
       <tr>
-        <td class="property-key">Total Reduce Slots</td>
+        <td class="property-key">总 Reduce 槽位数</td>
         <td colspan="2">{stats.totalReduceSlots}</td>
       </tr>
       </tbody>
@@ -57,23 +57,23 @@
 
 <div class="row">
   <div class="col-xs-12">
-    <h4>Parameters</h4>
+    <h4>参数</h4>
     <table class="table table-bordered table-condensed table-striped">
       <thead>
       <tr>
-        <th class="property-key">Parameter</th>
-        <th class="property-key">Value</th>
-        <th>Job Name</th>
+        <th class="property-key">参数名</th>
+        <th class="property-key">值</th>
+        <th>作业名称<</th>
       </tr>
       </thead>
       <tbody>
       <tr>
-        <td class="property-key">Max <code>-Xmx</code></td>
+        <td class="property-key">最大 <code>-Xmx</code></td>
         <td>{stats.xmx.str}</td>
         <td>{stats.xmx.job}</td>
       </tr>
       <tr>
-        <td class="property-key">Max <code>-Xms</code></td>
+        <td class="property-key">最大 <code>-Xms</code></td>
         {?stats.xms.set}
           <td>
             {stats.xms.str}
@@ -83,22 +83,22 @@
           </td>
         {:else}
           <td colspan="2">
-            Not set.
+            未设置。
           </td>
         {/stats.xms.set}
       </tr>
       <tr>
-        <td class="property-key">Max <code>mapred.job.map.memory.mb</code></td>
+        <td class="property-key">最大 <code>mapred.job.map.memory.mb</code></td>
         <td>{stats.jobMapMemoryMb.max}</td>
         <td>{stats.jobMapMemoryMb.job}</td>
       </tr>
       <tr>
-        <td class="property-key">Max <code>mapred.job.reduce.memory.mb</code></td>
+        <td class="property-key">最大 <code>mapred.job.reduce.memory.mb</code></td>
         <td>{stats.jobReduceMemoryMb.max}</td>
         <td>{stats.jobReduceMemoryMb.job}</td>
       </tr>
       <tr>
-        <td class="property-key">Max Distributed Cache</td>
+        <td class="property-key">最大分布式缓存</td>
         {?stats.distributedCache.using}
           <td>
             {stats.distributedCache.max}
@@ -108,7 +108,7 @@
           </td>
         {:else}
           <td colspan="2">
-            Not used.
+            未使用。
           </td>
         {/stats.distributedCache.using}
       </tr>
@@ -119,33 +119,33 @@
 
 <div class="row">
   <div class="col-xs-12">
-    <h4>Counters</h4>
+    <h4>计数器</h4>
     <table class="table table-bordered table-condensed">
       <thead>
       <tr>
-        <th class="property-key">Parameter</th>
-        <th class="property-key">Value</th>
-        <th>Job Name</th>
+        <th class="property-key">参数名</th>
+        <th class="property-key">值</th>
+        <th>作业名称</th>
       </tr>
       </thead>
       <tbody>
       <tr>
-        <td class="property-key">Max <code>FILE_BYTES_READ</code></td>
+        <td class="property-key">最大 <code>FILE_BYTES_READ</code></td>
         <td>{stats.fileBytesRead.max}</td>
         <td>{stats.fileBytesRead.job}</td>
       </tr>
       <tr>
-        <td class="property-key">Max <code>HDFS_BYTES_READ</code></td>
+        <td class="property-key">最大 <code>HDFS_BYTES_READ</code></td>
         <td>{stats.hdfsBytesRead.max}</td>
         <td>{stats.hdfsBytesRead.job}</td>
       </tr>
       <tr>
-        <td class="property-key">Max <code>FILE_BYTES_WRITTEN</code></td>
+        <td class="property-key">最大 <code>FILE_BYTES_WRITTEN</code></td>
         <td>{stats.fileBytesWritten.max}</td>
         <td>{stats.fileBytesWritten.job}</td>
       </tr>
       <tr>
-        <td class="property-key">Max <code>HDFS_BYTES_WRITTEN</code></td>
+        <td class="property-key">最大 <code>HDFS_BYTES_WRITTEN</code></td>
         <td>{stats.hdfsBytesWritten.max}</td>
         <td>{stats.hdfsBytesWritten.job}</td>
       </tr>

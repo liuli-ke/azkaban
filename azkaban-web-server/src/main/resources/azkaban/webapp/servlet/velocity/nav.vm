@@ -116,22 +116,22 @@
       #if ($navbar_disabled != 1)
         <ul class="nav navbar-nav">
           <li#if($current_page == 'all') class="active"#end onClick="navMenuClick('$!context/')"><a
-              href="$!context/index">Projects</a></li>
+              href="$!context/index">项目</a></li>
           <li#if($current_page == 'schedule') class="active"#end
                                               onClick="navMenuClick('$!context/schedule')"><a
-              href="$!context/schedule">Scheduling</a></li>
+              href="$!context/schedule">调度</a></li>
           <!--<li#if($current_page ==
-            'triggers') class="active"#end onClick="navMenuClick('$!context/triggers')"><a href="$!context/triggers">Triggers</a></li>-->
+            'triggers') class="active"#end onClick="navMenuClick('$!context/triggers')"><a href="$!context/triggers">触发器</a></li>-->
           <li#if($current_page == 'executing') class="active"#end
                                                onClick="navMenuClick('$!context/executor')">
-            <a href="$!context/executor">Executing</a></li>
+            <a href="$!context/executor">执行中</a></li>
           <li#if($current_page == 'history') class="active"#end
                                              onClick="navMenuClick('$!context/history')"><a
-              href="$!context/history">History</a></li>
+              href="$!context/history">历史</a></li>
           <li#if($current_page == 'flowtrigger') class="active"#end
                                                  onClick="navMenuClick('$!context/flowtrigger')">
             <a
-                href="$!context/flowtrigger">Flow Trigger Schedule</a></li>
+                href="$!context/flowtrigger">工作流触发器调度</a></li>
 
           #foreach ($viewer in $viewers)
             #if (!$viewer.hidden)
@@ -151,7 +151,7 @@
 
           <li#if($current_page == 'doc') class="active"#end
                                          onClick="navMenuClick('https://azkaban.readthedocs.io/en/latest/')">
-            <a href="https://azkaban.readthedocs.io/en/latest/">Documentation</a></li>
+            <a href="https://azkaban.readthedocs.io/en/latest/">文档</a></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
@@ -159,7 +159,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">${user_id} <b
                 class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><a href="$!context?logout">Logout</a></li>
+              <li><a href="$!context?logout">退出登录</a></li>
             </ul>
           </li>
         </ul>

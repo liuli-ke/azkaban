@@ -39,7 +39,7 @@
     $(function () {
       $('tr.parent')
       .css("cursor", "pointer")
-      .attr("title", "Click to expand/collapse")
+      .attr("title", "点击展开/折叠")
       .click(function () {
         $(this).siblings('.child-' + this.id).toggle();
       });
@@ -54,10 +54,10 @@
       var successHandler = function (data) {
         console.log("cancel clicked");
         if (data.error) {
-          showDialog("Error", data.error);
+          showDialog("错误", data.error);
         }
         else {
-          showDialog("Killed", "Trigger " + id + " has been killed.");
+          showDialog("已终止", "触发器 " + id + " 已被终止。");
         }
       };
       ajaxCall(requestURL, requestData, successHandler);
@@ -69,7 +69,7 @@
       var successHandler = function (data) {
         console.log("cancel clicked");
         if (data.error) {
-          showDialog("Error", data.error);
+          showDialog("错误", data.error);
         }
         else {
           //showDialog("flow trigger properties", data.triggerProperties);
@@ -90,7 +90,7 @@
 
 <div class="az-page-header">
   <div class="container-full">
-    <h1><a href="${context}/flowtriggerinstance">Executing Triggers</a></h1>
+    <h1><a href="${context}/flowtriggerinstance">执行中的触发器</a></h1>
   </div>
 </div>
 
@@ -101,8 +101,8 @@
 ## Page Content
 
   <ul class="nav nav-tabs nav-sm" id="header-tabs">
-    <li id="currently-running-view-link"><a href="#currently-running">Trigger Executions</a></li>
-    <li id="recently-finished-view-link"><a href="#recently-finished">Recently Finished</a></li>
+    <li id="currently-running-view-link"><a href="#currently-running">触发器执行</a></li>
+    <li id="recently-finished-view-link"><a href="#recently-finished">最近完成</a></li>
   </ul>
 
   <div class="row" id="currently-running-view">
@@ -112,17 +112,17 @@
         <thead>
         <tr>
           <th>#</th>
-          <th class="execid">Trigger Instance Id</th>
-          <th>Flow</th>
-          <th>Project</th>
-          <th>Submitted by</th>
-          <th class="date">Start time</th>
-          <th class="date">End time</th>
-          <th class="status">Status</th>
-          <th class="elapse">Elapsed</th>
-          <th class="flowExecId">Triggered Flow Execution Id</th>
-          <th class="config">Trigger Properties</th>
-          <th class="action">Action</th>
+          <th class="execid">触发器实例 Id</th>
+          <th>工作流</th>
+          <th>项目</th>
+          <th>提交人</th>
+          <th class="date">开始时间</th>
+          <th class="date">结束时间</th>
+          <th class="status">状态</th>
+          <th class="elapse">耗时</th>
+          <th class="flowExecId">触发的工作流执行 Id</th>
+          <th class="config">触发器属性</th>
+          <th class="action">操作</th>
         </tr>
         </thead>
         <tbody>
@@ -169,9 +169,9 @@
               #end
 
               #if (${trigger.getFlowExecId()} == "-1")
-                <td>Flow not triggered yet</td>
+                <td>工作流尚未触发</td>
               #elseif (${trigger.getFlowExecId()} == "-2")
-                <td>Flow failed to be triggered</td>
+                <td>工作流触发失败</td>
               #else
                 <td><a
                     href="${context}/executor?execid=${trigger.getFlowExecId()}">${trigger.getFlowExecId()}</a>
@@ -181,14 +181,14 @@
               <td>
                 <button type="button" id="showTriggerProperties" class="btn btn-sm btn-info"
                         onclick="showTriggerProperties('${trigger.getId()}')">
-                  Show
+                  查看
                 </button>
               </td>
 
               <td>
                 #if (${trigger.getStatus()} == "RUNNING")
                   <button type="button" id="cancelbtn" class="btn btn-danger btn-sm"
-                          onclick="killTrigger('${trigger.getId()}')">Kill
+                          onclick="killTrigger('${trigger.getId()}')">终止
                   </button>
                 #else
                   -
@@ -197,11 +197,11 @@
 
             <tr class="child-${trigger.getId()}">
               <td>&nbsp;</td>
-              <td>Name</td>
-              <td>Start time</td>
-              <td>End time</td>
-              <td>Status</td>
-              <td>Elapsed time</td>
+              <td>名称</td>
+              <td>开始时间</td>
+              <td>结束时间</td>
+              <td>状态</td>
+              <td>耗时</td>
             </tr>
               #foreach ($dep in $trigger.getDepInstances())
               <tr class="child-${trigger.getId()}">
@@ -252,7 +252,7 @@
             #end
           #else
           <tr>
-            <td colspan="10">No Executing Flows</td>
+            <td colspan="10">无正在执行的触发器</td>
           </tr>
           #end
         </tbody>
@@ -267,17 +267,17 @@
         <thead>
         <tr>
           <th>#</th>
-          <th class="execid">Trigger Instance Id</th>
-          <th>Flow</th>
-          <th>Project</th>
-          <th>Submitted by</th>
-          <th class="date">Start time</th>
-          <th class="date">End time</th>
-          <th class="status">Status</th>
-          <th class="elapse">Elapsed</th>
-          <th class="flowExecId">Triggered Flow Execution Id</th>
-          <th class="config">Trigger Properties</th>
-          <th class="action">Action</th>
+          <th class="execid">触发器实例 Id</th>
+          <th>工作流</th>
+          <th>项目</th>
+          <th>提交人</th>
+          <th class="date">开始时间</th>
+          <th class="date">结束时间</th>
+          <th class="status">状态</th>
+          <th class="elapse">耗时</th>
+          <th class="flowExecId">触发的工作流执行 Id</th>
+          <th class="config">触发器属性</th>
+          <th class="action">操作</th>
         </tr>
         </thead>
         <tbody>
@@ -323,9 +323,9 @@
                 </td>
               #end
               #if (${trigger.getFlowExecId()} == "-1")
-                <td>Flow not triggered yet</td>
+                <td>工作流尚未触发</td>
               #elseif (${trigger.getFlowExecId()} == "-2")
-                <td>Flow failed to be triggered</td>
+                <td>工作流触发失败</td>
               #else
                 <td><a
                     href="${context}/executor?execid=${trigger.getFlowExecId()}">${trigger.getFlowExecId()}</a>
@@ -346,12 +346,12 @@
 
             <tr class="child-${trigger.getId()}">
               <td>&nbsp;</td>
-              <td>Name</td>
-              <td>Start time</td>
-              <td>End time</td>
-              <td>Status</td>
-              <td>Cancellation Cause</td>
-              <td>Elapsed time</td>
+              <td>名称</td>
+              <td>开始时间</td>
+              <td>结束时间</td>
+              <td>状态</td>
+              <td>取消原因</td>
+              <td>耗时</td>
             </tr>
               #foreach ($dep in $trigger.getDepInstances())
               <tr class="child-${trigger.getId()}">
@@ -381,7 +381,7 @@
             #end
           #else
           <tr>
-            <td colspan="10">No Executing Flows</td>
+            <td colspan="10">无正在执行的触发器</td>
           </tr>
           #end
         </tbody>
@@ -395,14 +395,14 @@
         <div class="modal-header" id="messageTitle">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
           </button>
-          <h4 class="modal-title">Error</h4>
+          <h4 class="modal-title">错误</h4>
         </div>
         <div class="modal-body" id="messageDiv">
           <p id="messageBox"></p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" data-dismiss="modal"
-                  onclick="window.location.reload(true);">Dismiss
+                  onclick="window.location.reload(true);">关闭
           </button>
         </div>
       </div>

@@ -20,21 +20,21 @@
   <div id="project-description-form" class="editable-form">
     <div class="input-group">
       <input type="text" class="form-control input-sm" id="project-description-edit"
-             placeholder="Project description">
+             placeholder="项目描述">
       <span class="input-group-btn">
-                  <button class="btn btn-primary btn-sm" type="button" id="project-description-btn">Save</button>
+                  <button class="btn btn-primary btn-sm" type="button" id="project-description-btn">保存</button>
                 </span>
     </div>
   </div>
   <hr>
-  <p><strong>Created on</strong> $TimeUtils.formatDateTime($project.createTimestamp)</p>
+  <p><strong>创建于</strong> $TimeUtils.formatDateTime($project.createTimestamp)</p>
   <p>
-    <strong>Last modified on</strong> $TimeUtils.formatDateTime($project.lastModifiedTimestamp)
+    <strong>最后修改于</strong> $TimeUtils.formatDateTime($project.lastModifiedTimestamp)
   </p>
-  <p><strong>Modified by</strong> $project.lastModifiedUser</p>
+  <p><strong>修改人</strong> $project.lastModifiedUser</p>
 
   <hr>
 
-  <p><strong>Project admins:</strong> $admins</p>
-  <p><strong>Your Permissions:</strong> $userpermission.toString()</p>
+  <p><strong>项目管理员:</strong> $admins</p>
+  <p><strong>您的权限:</strong> $userpermission.toString()</p>
 </div>

@@ -19,41 +19,41 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">SLA Options</h4>
+        <h4 class="modal-title">SLA 选项</h4>
       </div>
       <div class="modal-body">
-        <h4>SLA Alert Emails</h4>
+        <h4>SLA 告警邮件</h4>
         <fieldset>
           <div class="form-group">
-            <label>SLA Alert Emails</label>
+            <label>SLA 告警邮件</label>
             <textarea id="slaEmails" class="form-control"></textarea>
           </div>
         </fieldset>
-        <h4>Flow SLA Rules</h4>
+        <h4>工作流 SLA 规则</h4>
         <table class="table table-striped" id="flowRulesTbl">
           <thead>
           <tr>
-            <th>Flow/Job</th>
-            <th>Sla Rule</th>
-            <th>Duration(In HH:MM eg. kill in 10 minutes is 00:10)</th>
-            <th>Email Action</th>
-            <th>Kill Action</th>
+            <th>工作流/作业</th>
+            <th>Sla 规则</th>
+            <th>持续时间(格式 HH:MM，例如 10 分钟后终止为 00:10)</th>
+            <th>邮件操作</th>
+            <th>终止操作</th>
           </tr>
           </thead>
           <tbody>
           <tr id="addRow">
             <td id="addRow-col" colspan="5">
               <span class="addIcon"></span>
-              <button type="button" class="btn btn-xs btn-success" id="add-btn">Add Row</button>
+              <button type="button" class="btn btn-xs btn-success" id="add-btn">添加行</button>
             </td>
           </tr>
           </tbody>
         </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
         <!--<button type="button" class="btn btn-danger" id="remove-sla-btn">Remove SLA</button>-->
-        <button type="button" class="btn btn-primary" id="set-sla-btn">Set/Change SLA</button>
+        <button type="button" class="btn btn-primary" id="set-sla-btn">设置/更改 SLA</button>
       </div>
     </div>
   </div>

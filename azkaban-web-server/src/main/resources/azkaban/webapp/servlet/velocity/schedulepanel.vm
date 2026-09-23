@@ -45,56 +45,52 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Schedule Flow Options</h4>
+        <h4 class="modal-title">调度工作流选项</h4>
       </div><!-- /modal-header -->
       <div class="modal-body">
         <fieldset class="form-horizontal">
           <div class="form-group">
 
             <div class="col-sm-12" style="height:55px;">
-              <h4 style="color:Coral; font-style:italic;">All schedules are based on the server
-                timezone: <b id="timeZoneID"></b>.</h4>
-              <h6 style="color:#0080ff;">Warning: the execution will be skipped if it is scheduled
-                to run during the hour that is lost when DST starts in the Spring.
-                E.g. there is no 2 - 3 AM when PST switches to PDT.</h6>
+              <h4 style="color:Coral; font-style:italic;">所有调度均基于服务器时区: <b id="timeZoneID"></b>。</h4>
+              <h6 style="color:#0080ff;">警告：如果调度在执行夏令时开始（春季）时丢失的那个小时内运行，执行将被跳过。
+                例如，当 PST 切换到 PDT 时，没有凌晨 2 点到 3 点。</h6>
 
             </div>
             <div class="col-xs-12" style="height:30px;"></div>
             <div class="form-group">
               <div class="col-sm-6">
-                <label class="col-sm-4 control-label" id="min_label">Min</label>
+                <label class="col-sm-4 control-label" id="min_label">分钟</label>
                 <div class="col-sm-8">
                   <input type="text" id="minute_input" value="*" class="form-control"
                          oninput="updateOutput()">
                 </div>
                 <br/> <br/> <br/>
-                <label class="col-sm-4 control-label" id="hour_label">Hours</label>
+                <label class="col-sm-4 control-label" id="hour_label">小时</label>
                 <div class="col-sm-8">
                   <input type="text" id="hour_input" value="*" class="form-control"
                          oninput="updateOutput()">
                 </div>
                 <br/> <br/> <br/>
-                <label class="col-sm-4 control-label" id="dom_label" style="margin-top:-8px">Day of
-                  Month</label>
+                <label class="col-sm-4 control-label" id="dom_label" style="margin-top:-8px">每月第几天</label>
                 <div class="col-sm-8">
                   <input type="text" id="dom_input" value="?" class="form-control"
                          oninput="updateOutput()">
                 </div>
                 <br/> <br/> <br/>
-                <label class="col-sm-4 control-label" id="mon_label">Month</label>
+                <label class="col-sm-4 control-label" id="mon_label">月</label>
                 <div class="col-sm-8">
                   <input type="text" id="month_input" value="*" class="form-control"
                          oninput="updateOutput()">
                 </div>
                 <br/> <br/> <br/>
-                <label class="col-sm-4 control-label" id="dow_label" style="margin-top:-8px">Day of
-                  Week</label>
+                <label class="col-sm-4 control-label" id="dow_label" style="margin-top:-8px">星期几</label>
                 <div class="col-sm-8">
                   <input type="text" id="dow_input" value="*" class="form-control"
                          oninput="updateOutput()">
                 </div>
                 <br/> <br/> <br/>
-                <label class="col-sm-4 control-label" id="year_label">Year</label>
+                <label class="col-sm-4 control-label" id="year_label">年</label>
                 <div class="col-sm-8">
                   <input type="text" id="year_input" value="" class="form-control"
                          oninput="updateOutput()">
@@ -102,29 +98,29 @@
               </div>
 
               <div class="col-sm-5" style="background-color:#f5f5f5; border:1px solid #e3e3e3">
-                <h4 style="color:orange">Special Characters:</h4>
+                <h4 style="color:orange">特殊字符:</h4>
                 <table class="table table-striped" data-row-style="rowColors" id="instructions">
                   <tbody>
                   <tr class="success">
                     <th scope="row">*</th>
-                    <td>any value</td>
+                    <td>任意值</td>
                   </tr>
                   <tr class="primary">
                     <th scope="row">,</th>
-                    <td>value list separators</td>
+                    <td>值列表分隔符</td>
                   </tr>
                   <tr class="warning">
                     <th scope="row">-</th>
-                    <td>range of values</td>
+                    <td>值范围</td>
                   </tr>
                   <tr class="danger">
                     <th scope="row">/</th>
-                    <td>step values</td>
+                    <td>步长值</td>
                   </tr>
                   </tbody>
                 </table>
                 <p><u><span style="color:Indigo"><a
-                    href="http://www.quartz-scheduler.org/documentation/quartz-2.3.0/tutorials/crontrigger.html#examples" target="_blank">Detailed instructions</a></span>.</u>
+                    href="http://www.quartz-scheduler.org/documentation/quartz-2.3.0/tutorials/crontrigger.html#examples" target="_blank">详细说明</a></span>。</u>
                 </p>
               </div>
             </div>
@@ -136,13 +132,13 @@
                 <span class="unit">0</span>
               </div>
             </div>
-            <button type="button" class="col-sm-offset-1 btn btn-warning" id="clearCron">Reset
+            <button type="button" class="col-sm-offset-1 btn btn-warning" id="clearCron">重置
             </button>
             <div class="col-xs-12" style="height:20px;"></div>
 
             <div class="col-sm-12" style="background-color:#f5f5f5; border:1px solid #e3e3e3">
               <h4 id="nextRecurLabel">
-                Next 10 scheduled executions:
+                接下来 10 次计划执行：
               </h4>
               <ul id="nextRecurId">
               </ul>
@@ -155,8 +151,8 @@
         </fieldset>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-success" id="schedule-button">Schedule</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" id="schedule-button">调度</button>
       </div>
     </div>
   </div>

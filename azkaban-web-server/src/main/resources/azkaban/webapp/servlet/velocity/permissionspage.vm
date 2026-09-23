@@ -62,22 +62,22 @@
 
         <div class="panel panel-success">
           <div class="panel-heading">
-            User
+            用户
             #if ($isAdmin)
               <div class="pull-right">
-                <button id="addUser" class="btn btn-xs btn-success">Add</button>
+                <button id="addUser" class="btn btn-xs btn-success">添加</button>
               </div>
             #end
           </div>
           <table class="table table-striped permission-table" id="permissions-table">
             <thead>
             <tr>
-              <th class="tb-username">User</th>
-              <th class="tb-perm">Admin</th>
-              <th class="tb-read">Read</th>
-              <th class="tb-write">Write</th>
-              <th class="tb-execute">Execute</th>
-              <th class="tb-schedule">Schedule</th>
+              <th class="tb-username">用户</th>
+              <th class="tb-perm">管理员</th>
+              <th class="tb-read">读</th>
+              <th class="tb-write">写</th>
+              <th class="tb-execute">执行</th>
+              <th class="tb-schedule">调度</th>
               #if ($isAdmin)
                 <th class="tb-action"></th>
               #end
@@ -90,7 +90,7 @@
                 <tr>
                   <td class="tb-username">
                     #if ($perm.first == $username)
-                      ${perm.first} <span class="sublabel">(you)</span>
+                      ${perm.first} <span class="sublabel">(你)</span>
                     #else
                       $perm.first
                     #end
@@ -127,7 +127,7 @@
                     <td>
                       <button id="$perm.first" #if($perm.first == $username) disabled="disabled"
                               class="btn btn-xs btn-disabled" #else
-                              class="btn btn-xs btn-default" #end>Change
+                              class="btn btn-xs btn-default" #end>更改
                       </button>
                     </td>
                   #end
@@ -136,11 +136,11 @@
               #else
                 #if ($isAdmin)
                 <tr>
-                  <td colspan="7">No Users Found.</td>
+                  <td colspan="7">未找到用户。</td>
                 </tr>
                 #else
                 <tr>
-                  <td colspan="6">No Users Found.</td>
+                  <td colspan="6">未找到用户。</td>
                 </tr>
                 #end
               #end
@@ -152,22 +152,22 @@
 
         <div class="panel panel-warning">
           <div class="panel-heading">
-            Group
+            用户组
             #if ($isAdmin)
               <div class="pull-right">
-                <button id="addGroup" class="btn btn-xs btn-warning">Add</button>
+                <button id="addGroup" class="btn btn-xs btn-warning">添加</button>
               </div>
             #end
           </div>
           <table class="table table-striped permission-table" id="group-permissions-table">
             <thead>
             <tr>
-              <th class="tb-username">Group</th>
-              <th class="tb-perm">Admin</th>
-              <th class="tb-read">Read</th>
-              <th class="tb-write">Write</th>
-              <th class="tb-execute">Execute</th>
-              <th class="tb-schedule">Schedule</th>
+              <th class="tb-username">用户组</th>
+              <th class="tb-perm">管理员</th>
+              <th class="tb-read">读</th>
+              <th class="tb-write">写</th>
+              <th class="tb-execute">执行</th>
+              <th class="tb-schedule">调度</th>
               #if ($isAdmin)
                 <th class="tb-action"></th>
               #end
@@ -179,7 +179,7 @@
                 <tr>
                   <td class="tb-username">
                     #if ($perm.first == $username)
-                      ${perm.first} <span class="sublabel">(you)</span>
+                      ${perm.first} <span class="sublabel">(你)</span>
                     #else
                       $perm.first
                     #end
@@ -216,7 +216,7 @@
 
                   #if ($isAdmin)
                     <td>
-                      <button id="group-$perm.first" class="btn btn-xs btn-default">Change</button>
+                      <button id="group-$perm.first" class="btn btn-xs btn-default">更改</button>
                     </td>
                   #end
                 </tr>
@@ -224,11 +224,11 @@
               #else
                 #if ($isAdmin)
                 <tr>
-                  <td colspan="7">No Groups Found.</td>
+                  <td colspan="7">未找到用户组。</td>
                 </tr>
                 #else
                 <tr>
-                  <td colspan="6">No Groups Found.</td>
+                  <td colspan="6">未找到用户组。</td>
                 </tr>
                 #end
               #end
@@ -240,17 +240,17 @@
 
         <div class="panel panel-info">
           <div class="panel-heading">
-            Proxy Users
+            代理用户
             #if ($isAdmin)
               <div class="pull-right">
-                <button id="addProxyUser" class="btn btn-xs btn-info">Add</button>
+                <button id="addProxyUser" class="btn btn-xs btn-info">添加</button>
               </div>
             #end
           </div>
           <table class="table table-striped permission-table" id="proxy-user-table">
             <thead>
             <tr>
-              <th class="tb-username">Proxy User</th>
+              <th class="tb-username">代理用户</th>
               #if ($isAdmin)
                 <th class="tb-action"></th>
               #end
@@ -261,11 +261,11 @@
                 #foreach ($proxyUser in $proxyUsers)
                 <tr>
                   <td class="tb-username">#if($proxyUser == $username) ${proxyUser} <span
-                      class="sublabel">(you)</span> #else $proxyUser #end</td>
+                      class="sublabel">(你)</span> #else $proxyUser #end</td>
                   #if ($isAdmin)
                     <td>
                       <button id="proxy-${proxyUser}" name="${proxyUser}"
-                              class="btn btn-xs btn-danger">Remove
+                              class="btn btn-xs btn-danger">移除
                       </button>
                     </td>
                   #end
@@ -274,11 +274,11 @@
               #else
                 #if ($isAdmin)
                 <tr>
-                  <td colspan="2">No Proxy User Found.</td>
+                  <td colspan="2">未找到代理用户。</td>
                 </tr>
                 #else
                 <tr>
-                  <td>No Proxy User Found.</td>
+                  <td>未找到代理用户。</td>
                 </tr>
                 #end
               #end
@@ -300,15 +300,15 @@
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
             </button>
-            <h4 class="modal-title">Remove Proxy User</h4>
+            <h4 class="modal-title">移除代理用户</h4>
           </div>
           <div class="modal-body">
             <div class="alert alert-danger" id="remove-proxy-error-msg"></div>
-            <p><strong>Warning:</strong> <span id="remove-proxy-msg"></span></p>
+            <p><strong>警告:</strong> <span id="remove-proxy-msg"></span></p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-danger" id="remove-proxy-btn">Remove Proxy User</a>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-danger" id="remove-proxy-btn">移除代理用户</a>
           </div>
         </div>
       </div>
@@ -322,13 +322,13 @@
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
             </button>
-            <h4 class="modal-title">Add Proxy User</h4>
+            <h4 class="modal-title">添加代理用户</h4>
           </div>
           <div class="modal-body">
             <div class="alert alert-danger" id="add-proxy-error-msg"></div>
             <fieldset class="form-horizontal">
               <div class="form-group">
-                <label for="path" class="col-sm-2 control-label">Proxy</label>
+                <label for="path" class="col-sm-2 control-label">代理</label>
                 <div class="col-sm-10">
                   <input type="text" name="proxyid" id="proxy-user-box" class="form-control">
                 </div>
@@ -336,8 +336,8 @@
             </fieldset>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" id="add-proxy-btn">Add Proxy User</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" id="add-proxy-btn">添加代理用户</button>
           </div>
         </div>
       </div>
@@ -351,13 +351,13 @@
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
             </button>
-            <h4 class="modal-title" id="change-title">Change Permissions</h4>
+            <h4 class="modal-title" id="change-title">更改权限</h4>
           </div>
           <div class="modal-body">
             <div class="alert alert-danger" id="change-permission-error-msg"></div>
             <fieldset class="form-horizontal">
               <div class="form-group">
-                <label for="path" class="col-sm-2 control-label" id="change-type">User</label>
+                <label for="path" class="col-sm-2 control-label" id="change-type">用户</label>
                 <div class="col-sm-10">
                   <input type="text" name="userid" id="user-box" class="form-control">
                 </div>
@@ -366,31 +366,31 @@
                 <div class="col-sm-offset-2 col-sm-10">
                   <label class="checkbox-inline">
                     <input id="admin-change" name="admin" type="checkbox">
-                    Admin
+                    管理员
                   </label>
                   <label class="checkbox-inline">
                     <input id="read-change" name="read" type="checkbox">
-                    Read
+                    读
                   </label>
                   <label class="checkbox-inline">
                     <input id="write-change" name="write" type="checkbox">
-                    Write
+                    写
                   </label>
                   <label class="checkbox-inline">
                     <input id="execute-change" name="execute" type="checkbox">
-                    Execute
+                    执行
                   </label>
                   <label class="checkbox-inline">
                     <input id="schedule-change" name="schedule" type="checkbox">
-                    Schedule
+                    调度
                   </label>
                 </div>
               </div>
             </fieldset>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" id="change-btn">Commit</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" id="change-btn">提交</button>
           </div>
         </div>
       </div>

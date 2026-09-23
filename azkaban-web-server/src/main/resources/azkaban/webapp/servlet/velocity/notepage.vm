@@ -57,7 +57,7 @@
 
   <div class="az-page-header">
     <div class="container-full">
-      <h1>Notification System</h1>
+      <h1>通知系统</h1>
     </div>
   </div>
 
@@ -65,17 +65,17 @@
     <form class="form-horizontal" role="form">
 
       <div class="form-group">
-        <label class="control-label col-sm-3">Type: </label>
+        <label class="control-label col-sm-3">类型: </label>
         <div class="col-sm-6">
           <div class="row show-and-hide-content">
             <div class="col-sm-4">
               <label class="radio-inline">
-                <input type="radio" name='note-type' value="Warning">Warning
+                <input type="radio" name='note-type' value="Warning">警告
               </label>
             </div>
             <div class="col-sm-4">
               <label class="radio-inline">
-                <input type="radio" name='note-type' value="Action Required">Action Required
+                <input type="radio" name='note-type' value="Action Required">需要操作
               </label>
             </div>
           </div>
@@ -83,13 +83,13 @@
       </div> <!-- /.form-group -->
 
       <div class="form-group">
-        <label for="firstName" class="col-sm-3 control-label">Message: </label>
+        <label for="firstName" class="col-sm-3 control-label">消息: </label>
         <div class="col-sm-6">
           <input type="text" id="message" placeholder="Message" class="form-control" autofocus>
         </div>
       </div>
       <div class="form-group">
-        <label for="email" class="col-sm-3 control-label">Redirect: </label>
+        <label for="email" class="col-sm-3 control-label">重定向: </label>
         <div class="col-sm-9">
           <input type="text" id="url" placeholder="URL" class="form-control">
         </div>
@@ -97,12 +97,12 @@
       <div class="form-group">
         <div class="col-sm-3 col-sm-offset-3">
           <button type="submit" id="submit-button" class="btn btn-primary btn-block"
-                  onclick="enableBanner()">Submit Note
+                  onclick="enableBanner()">提交通知
           </button>
         </div>
         <div class="col-sm-2 col-sm-offset-4">
           <button type="submit" id="clear-button" class="btn btn-warning btn-block"
-                  onclick="enableBanner()">Clear Note
+                  onclick="enableBanner()">清除通知
           </button>
         </div>
       </div>

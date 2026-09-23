@@ -17,50 +17,50 @@
 <div id="scheduleModalBackground" class="modalBackground2">
   <div id="schedule-options" class="modal modalContainer2">
     <a href='#' title='Close' class='modal-close'>x</a>
-    <h3>Schedule Flow Options</h3>
+    <h3>调度工作流选项</h3>
     <div>
       <ul class="optionsPicker">
-        <li id="scheduleGeneralOptions">General Options</li>
-        <li id="scheduleFlowOptions">Flow Options</li>
-        <!--li id="scheduleSlaOptions">SLA Options</li-->
+        <li id="scheduleGeneralOptions">常规选项</li>
+        <li id="scheduleFlowOptions">工作流选项</li>
+        <!--li id="scheduleSlaOptions">SLA 选项</li-->
       </ul>
     </div>
     <div class="optionsPane">
       <!--div id="scheduleSlaPanel" class="generalPanel panel">
         <div id="slaActions">
-          <h4>SLA Alert Emails</h4>
+          <h4>SLA 告警邮件</h4>
           <dl>
-            <dt >SLA Alert Emails</dt>
+            <dt >SLA 告警邮件</dt>
             <dd>
               <textarea id="slaEmails"></textarea>
             </dd>
           </dl>
         </div>
         <div id="slaRules">
-          <h4>Flow SLA Rules</h4>
+          <h4>工作流 SLA 规则</h4>
           <div class="tableDiv">
             <table id="flowRulesTbl">
               <thead>
                 <tr>
-                  <th>Flow/Job</th>
-                  <th>Finish In</th>
-                  <th>Email Action</th>
-                  <th>Kill Action</th>
+                  <th>工作流/作业</th>
+                  <th>完成于</th>
+                  <th>邮件操作</th>
+                  <th>终止操作</th>
                 </tr>
               </thead>
               <tbody>
               </tbody>
             </table>
           </div>
-          <h4>Job SLA Rules</h4>
+          <h4>作业 SLA 规则</h4>
           <div class="tableDiv">
             <table id="jobRulesTbl">
               <thead>
                 <tr>
-                  <th>Flow/Job</th>
-                  <th>Finish In</th>
-                  <th>Email Action</th>
-                  <th>Kill Action</th>
+                  <th>工作流/作业</th>
+                  <th>完成于</th>
+                  <th>邮件操作</th>
+                  <th>终止操作</th>
                 </tr>
               </thead>
               <tbody>
@@ -72,7 +72,7 @@
       <div id="scheduleGeneralPanel" class="generalPanel panel">
         <div id="scheduleInfo">
           <dl>
-            <dt>Schedule Time</dt>
+            <dt>调度时间</dt>
             <dd>
               <input id="advhour" type="text" size="2" value="12"/>
               <input id="advminutes" type="text" size="2" value="00"/>
@@ -85,19 +85,19 @@
                 <option>UTC</option>
               </select>
             </dd>
-            <dt>Schedule Date</dt>
+            <dt>调度日期</dt>
             <dd><input type="text" id="advdatepicker"/></dd>
-            <dt>Recurrence</dt>
+            <dt>重复</dt>
             <dd>
               <input id="advis_recurring" type="checkbox" checked/>
-              <span>repeat every</span>
+              <span>每隔</span>
               <input id="advperiod" type="text" size="2" value="1"/>
               <select id="advperiod_units">
-                <option value="d">Days</option>
-                <option value="h">Hours</option>
-                <option value="m">Minutes</option>
-                <option value="M">Months</option>
-                <option value="w">Weeks</option>
+                <option value="d">天</option>
+                <option value="h">小时</option>
+                <option value="m">分钟</option>
+                <option value="M">月</option>
+                <option value="w">周</option>
               </select>
             </dd>
           </dl>
@@ -105,55 +105,55 @@
         <br></br>
         <br></br>
         <div id="scheduleCompleteActions">
-          <h4>Completion Actions</h4>
+          <h4>完成操作</h4>
           <dl>
-            <dt>Failure Action</dt>
+            <dt>失败操作</dt>
             <dd>
               <select id="scheduleFailureAction" name="failureAction">
-                <option value="finishCurrent">Finish Current Running</option>
-                <option value="cancelImmediately">Cancel All</option>
-                <option value="finishPossible">Finish All Possible</option>
+                <option value="finishCurrent">完成当前运行</option>
+                <option value="cancelImmediately">取消全部</option>
+                <option value="finishPossible">完成所有可能</option>
               </select>
             </dd>
-            <dt>Failure Email</dt>
+            <dt>失败邮件</dt>
             <dd>
               <textarea id="scheduleFailureEmails"></textarea>
             </dd>
-            <dt>Notify on Failure</dt>
+            <dt>失败时通知</dt>
             <dd>
               <input id="scheduleNotifyFailureFirst" class="checkbox" type="checkbox" name="notify"
-                     value="first" checked>First Failure</input>
+                     value="first" checked>首次失败</input>
               <input id="scheduleNotifyFailureLast" class="checkbox" type="checkbox" name="notify"
-                     value="last">Flow Stop</input>
+                     value="last">工作流停止</input>
             </dd>
-            <dt>Success Email</dt>
+            <dt>成功邮件</dt>
             <dd>
               <textarea id="scheduleSuccessEmails"></textarea>
             </dd>
-            <dt>Concurrent Execution</dt>
+            <dt>并发执行</dt>
             <dd id="scheduleExecutingJob" class="disabled">
               <input id="scheduleIgnore" class="radio" type="radio" name="concurrent" value="ignore"
-                     checked/><label class="radioLabel" for="ignore">Run Concurrently</label>
+                     checked/><label class="radioLabel" for="ignore">并发运行</label>
               <input id="schedulePipeline" class="radio" type="radio" name="concurrent"
-                     value="pipeline"/><label class="radioLabel" for="pipeline">Pipeline</label>
+                     value="pipeline"/><label class="radioLabel" for="pipeline">管道</label>
               <input id="scheduleQueue" class="radio" type="radio" name="concurrent" value="queue"/><label
-                class="radioLabel" for="queue">Queue Job</label>
+                class="radioLabel" for="queue">排队作业</label>
             </dd>
           </dl>
         </div>
         <div id="scheduleFlowPropertyOverride">
-          <h4>Flow Property Override</h4>
+          <h4>工作流属性覆盖</h4>
           <div class="tableDiv">
             <table>
               <thead>
               <tr>
-                <th>Name</th>
-                <th>Value</th>
+                <th>名称</th>
+                <th>值</th>
               </tr>
               </thead>
               <tbody>
               <tr id="scheduleAddRow">
-                <td id="addRow-col" colspan="2"><span class="addIcon"></span><a href="#">Add Row</a>
+                <td id="addRow-col" colspan="2"><span class="addIcon"></span><a href="#">添加行</a>
                 </td>
               </tr>
               </tbody>
@@ -164,11 +164,11 @@
       <div id="scheduleGraphPanel" class="graphPanel panel">
         <div id="scheduleJobListCustom" class="jobList">
           <div class="filterList">
-            <input class="filter" placeholder="  Job Filter"/>
+            <input class="filter" placeholder="  作业筛选"/>
           </div>
           <div class="list">
           </div>
-          <div class="btn5 resetPanZoomBtn">Reset Pan Zoom</div>
+          <div class="btn5 resetPanZoomBtn">重置平移缩放</div>
         </div>
         <div id="scheduleSvgDivCustom" class="svgDiv">
           <svg class="svgGraph" xmlns="http://www.w3.org/2000/svg" version="1.1"
@@ -178,8 +178,8 @@
       </div>
     </div>
     <div class="actions">
-      <a class="yes btn1" id="adv-schedule-btn" href="#">Schedule</a>
-      <a class="no simplemodal-close btn3" id="schedule-cancel-btn" href="#">Cancel</a>
+      <a class="yes btn1" id="adv-schedule-btn" href="#">调度</a>
+      <a class="no simplemodal-close btn3" id="schedule-cancel-btn" href="#">取消</a>
     </div>
   </div>
 </div>

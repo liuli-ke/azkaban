@@ -25,30 +25,27 @@
         <div class="col-xs-4">
           <ul class="nav nav-pills nav-stacked" id="graph-options">
             <li id="flow-option" viewpanel="svg-div-custom">
-              <a href="#">Flow View</a>
-              <div class="menu-caption">Right click on the jobs to disable and enable jobs in the
-                flow.
+              <a href="#">工作流视图</a>
+              <div class="menu-caption">右键单击作业可在工作流中禁用或启用作业。
               </div>
             </li>
             <li viewpanel="notification-panel">
-              <a href="#">Notification</a>
-              <div class="menu-caption">Change the address where success and failure emails will be
-                sent.
+              <a href="#">通知</a>
+              <div class="menu-caption">更改成功和失败邮件的发送地址。
               </div>
             </li>
             <li viewpanel="failure-options">
-              <a href="#">Failure Options</a>
-              <div class="menu-caption">Select flow behavior when a failure is detected.</div>
+              <a href="#">失败选项</a>
+              <div class="menu-caption">选择检测到失败时的工作流行为。</div>
             </li>
             <li viewpanel="concurrent-panel">
-              <a href="#">Concurrent</a>
-              <div class="menu-caption">Change the behavior of the flow if it is already running.
+              <a href="#">并发</a>
+              <div class="menu-caption">更改工作流已在运行时的行为。
               </div>
             </li>
             <li viewpanel="flow-parameters-panel">
-              <a href="#">Flow Parameters</a>
-              <div class="menu-caption">Add temporary flow parameters that are used to override
-                global settings for each job.
+              <a href="#">工作流参数</a>
+              <div class="menu-caption">添加临时工作流参数，用于覆盖每个作业的全局设置。
               </div>
             </li>
           </ul>
@@ -67,107 +64,101 @@
               ## Notification panel.
 
             <div id="notification-panel" class="side-panel">
-              <h4>Notify on failure</h4>
-              <p>On a job failure, notify on either the first failure, and/or when the failed flow
-                finishes.</p>
+              <h4>失败时通知</h4>
+              <p>当作业失败时，可选择在首次失败时通知，和/或失败的工作流结束时通知。</p>
               <hr>
               <div class="btn-group" data-toggle="buttons">
                 <label class="btn btn-default">
-                  <input id="notify-failure-first" type="radio" name="notify" value="first">First
-                  failure
+                  <input id="notify-failure-first" type="radio" name="notify" value="first">首次失败
                 </label>
                 <label class="btn btn-default">
-                  <input id="notify-failure-last" type="radio" name="notify" value="last">Flow
-                  finished
+                  <input id="notify-failure-last" type="radio" name="notify" value="last">工作流结束
                 </label>
               </div>
 
-              <h4>Failure Emails</h4>
+              <h4>失败邮件</h4>
               <div class="checkbox">
                 <label>
                   <input type="checkbox" id="override-failure-emails" name="overrideFailureEmails"
                          value="overrideFailureEmails">
-                  Override flow email settings.
+                  覆盖工作流邮件设置。
                 </label>
               </div>
-              <label>Notify these addresses on failure. Comma, space, or semi-colon delimited
-                list.</label>
+              <label>失败时通知这些地址。可使用逗号、空格或分号分隔的列表。</label>
               <textarea class="form-control" rows="3" id="failure-emails"></textarea>
 
-              <h4>Success Emails</h4>
+              <h4>成功邮件</h4>
               <div class="checkbox">
                 <label>
                   <input type="checkbox" id="override-success-emails" name="overrideSuccessEmails"
                          value="overrideSuccessEmails">
-                  Override flow email settings.
+                  覆盖工作流邮件设置。
                 </label>
               </div>
-              <label>Notify when the flow finishes successfully. Comma, space, or semi-colon
-                delimited list.</label>
+              <label>工作流成功完成时通知。可使用逗号、空格或分号分隔的列表。</label>
               <textarea class="form-control" rows="3" id="success-emails"></textarea>
             </div>
 
               ## Failure options panel.
 
             <div id="failure-options" class="side-panel">
-              <h4>Failure Options</h4>
-              <p>When a failure first occurs in the flow, select the execution behavior.</p>
+              <h4>失败选项</h4>
+              <p>当工作流首次出现失败时，选择执行行为。</p>
               <hr>
               <ul>
-                <li><strong>Finish Current Running</strong> finishes only the currently running job.
-                  It will not start any new jobs.
+                <li><strong>完成当前运行</strong> 仅完成当前正在运行的作业。
+                  不会启动任何新作业。
                 </li>
-                <li><strong>Cancel All</strong> immediately kills all jobs and fails the flow.</li>
-                <li><strong>Finish All Possible</strong> will keep executing jobs as long as its
-                  dependencies are met.
+                <li><strong>取消全部</strong> 立即终止所有作业并使工作流失败。</li>
+                <li><strong>完成所有可能</strong> 将在依赖满足的情况下继续执行作业。
                 </li>
               </ul>
               <select id="failure-action" name="failureAction"
                       class="form-control form-control-auto">
-                <option value="finishCurrent">Finish Current Running</option>
-                <option value="cancelImmediately">Cancel All</option>
-                <option value="finishPossible">Finish All Possible</option>
+                <option value="finishCurrent">完成当前运行</option>
+                <option value="cancelImmediately">取消全部</option>
+                <option value="finishPossible">完成所有可能</option>
               </select>
             </div>
 
               ## Concurrent execution options panel.
 
             <div id="concurrent-panel" class="side-panel">
-              <h4>Concurrent Execution Options</h4>
-              <p>If the flow is currently running, these are the options that can be set.</p>
+              <h4>并发执行选项</h4>
+              <p>如果工作流当前正在运行，可以设置以下选项。</p>
               <hr>
               <div class="radio">
                 <label>
                   <input type="radio" id="skip" name="concurrent" value="skip" checked="checked">
-                  Skip Execution
+                  跳过执行
                 </label>
-                <span class="help-block">Do not run flow if it is already running.</span>
+                <span class="help-block">如果工作流已在运行，则不运行。</span>
               </div>
 
               <div class="radio">
                 <label>
                   <input type="radio" id="ignore" name="concurrent" value="ignore">
-                  Run Concurrently
+                  并发运行
                 </label>
                 <span
-                    class="help-block">Run the flow anyway. Previous execution is unaffected.</span>
+                    class="help-block">仍运行工作流。之前的执行不受影响。</span>
               </div>
 
               <div class="radio">
                 <label>
                   <input type="radio" id="pipeline" name="concurrent" value="pipeline">
-                  Pipeline
+                  管道
                 </label>
                 <select id="pipeline-level" name="pipelineLevel"
                         class="form-control form-control-auto input-sm">
-                  <option value="1">Level 1</option>
-                  <option value="2">Level 2</option>
+                  <option value="1">级别 1</option>
+                  <option value="2">级别 2</option>
                 </select>
                 <span class="help-block">
-                        Pipeline the flow, so the current execution will not be overrun.
+                        以管道方式运行工作流，这样当前执行不会被覆盖。
                         <ul>
-                          <li>Level 1: block job A until the previous flow job A has completed.</li>
-                          <li>Level 2: block job A until the previous flow job A's children have completed.</li>
+                          <li>级别 1：阻塞作业 A，直到上一次工作流的作业 A 完成。</li>
+                          <li>级别 2：阻塞作业 A，直到上一次工作流的作业 A 的子作业完成。</li>
                           </li>
                       </span>
               </div>
@@ -176,20 +167,20 @@
               ## Flow parameters panel
 
             <div id="flow-parameters-panel" class="side-panel">
-              <h4>Flow Property Override</h4>
+              <h4>工作流属性覆盖</h4>
               <hr>
               <div id="editTable">
                 <table class="table table-striped">
                   <thead>
                   <tr>
-                    <th class="property-key">Name</th>
-                    <th>Value</th>
+                    <th class="property-key">名称</th>
+                    <th>值</th>
                   </tr>
                   </thead>
                   <tbody>
                   <tr id="addRow" class="addRow">
                     <td id="addRow-col" colspan="2">
-                      <button type="button" class="btn btn-success btn-xs" id="add-btn">Add Row
+                      <button type="button" class="btn btn-success btn-xs" id="add-btn">添加行
                       </button>
                     </td>
                   </tr>
@@ -205,7 +196,7 @@
       <div class="modal-footer">
           #if (!$show_schedule || $show_schedule == 'true')
             <div class="pull-left">
-              <button type="button" class="btn btn-success" id="schedule-btn">Schedule</button>
+              <button type="button" class="btn btn-success" id="schedule-btn">调度</button>
             </div>
           #end
 
@@ -216,8 +207,8 @@
             #end
           #end
           *#
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="execute-btn">Execute</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" id="execute-btn">执行</button>
       </div><!-- /modal-footer -->
     </div><!-- /modal-content -->
   </div><!-- /modal-dialog -->

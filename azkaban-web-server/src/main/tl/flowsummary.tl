@@ -3,19 +3,19 @@
     <table class="table table-bordered table-condensed">
       <tbody>
       <tr>
-        <td class="property-key">Project name</td>
+        <td class="property-key">项目名称</td>
         <td>{projectName}</td>
       </tr>
       <tr>
-        <td class="property-key">Job Types Used</td>
+        <td class="property-key">使用的作业类型</td>
         <td>{#jobTypes}{.} {/jobTypes}</td>
       </tr>
       <tr>
-        <td class="property-key">Condition</td>
+        <td class="property-key">条件</td>
         {?condition}
           <td>{condition}</td>
         {:else}
-          <td>none</td>
+          <td>无</td>
         {/condition}
       </tr>
       </tbody>
@@ -26,11 +26,11 @@
 <div class="row">
   <div class="col-xs-12">
     <h3>
-      Scheduling
+      调度
       {?schedule}
         <div class="pull-right">
           <button type="button" id="removeSchedBtn" class="btn btn-sm btn-danger"
-                  onclick="removeSched({schedule.scheduleId})">Remove Schedule
+                  onclick="removeSched({schedule.scheduleId})">移除调度
           </button>
         </div>
       {/schedule}
@@ -39,20 +39,20 @@
       <table class="table table-condensed table-bordered">
         <tbody>
         <tr>
-          <td class="property-key">Schedule ID</td>
+          <td class="property-key">调度 ID</td>
           <td class="property-value-half">{schedule.scheduleId}</td>
-          <td class="property-key">Submitted By</td>
+          <td class="property-key">提交人</td>
           <td class="property-value-half">{schedule.submitUser}</td>
         </tr>
         <tr>
-          <td class="property-key">First Scheduled to Run</td>
+          <td class="property-key">首次计划运行时间</td>
           <td class="property-value-half">{schedule.firstSchedTime}</td>
 
           <td class="property-key">
             {?schedule.cronExpression}
-              Cron Expression
+              Cron 表达式
             {:else}
-              Repeats Every
+              重复间隔
             {/schedule.cronExpression}
           </td>
 
@@ -66,18 +66,18 @@
 
         </tr>
         <tr>
-          <td class="property-key">Next Execution Time</td>
+          <td class="property-key">下次执行时间</td>
           <td class="property-value-half">{schedule.nextExecTime}</td>
           <td class="property-key">SLA</td>
           <td class="property-value-half">
             {?schedule.slaOptions}
-              true
+              已设置
             {:else}
-              false
+              未设置
             {/schedule.slaOptions}
             <div class="pull-right">
               <button type="button" id="addSlaBtn" class="btn btn-xs btn-primary"
-                      onclick="slaView.initFromSched({schedule.scheduleId}, '{flowName}')">View/Set
+                      onclick="slaView.initFromSched({schedule.scheduleId}, '{flowName}')">查看/设置
                 SLA
               </button>
             </div>
@@ -87,31 +87,31 @@
       </table>
     {:else}
       <div class="callout callout-default">
-        <h4>None</h4>
-        <p>This flow has not been scheduled.</p>
+        <h4>无</h4>
+        <p>该工作流尚未调度。</p>
       </div>
     {/schedule}
 
     <div class="row">
       <div class="col-xs-12">
         <h3>
-          Flow Trigger
+          工作流触发器
         </h3>
         {?flowtrigger}
           <table class="table table-condensed table-bordered">
             <tbody>
             <tr>
-              <td class="property-key">Max Wait Mins</td>
+              <td class="property-key">最大等待分钟数</td>
               <td class="property-value-half">{flowtrigger.maxWaitMin}</td>
-              <td class="property-key">Submitted By</td>
+              <td class="property-key">提交人</td>
               <td class="property-value-half">{flowtrigger.submitUser}</td>
             </tr>
             <tr>
-              <td class="property-key">First Scheduled to Run</td>
+              <td class="property-key">首次计划运行时间</td>
               <td class="property-value-half">{flowtrigger.firstSchedTime}</td>
 
               <td class="property-key">
-                Cron Expression
+                Cron 表达式
               </td>
 
               <td class="property-value-half">
@@ -122,18 +122,18 @@
 
             </tr>
             <tr>
-              <td class="property-key">Next Execution Time</td>
+              <td class="property-key">下次执行时间</td>
               <td class="property-value-half">{flowtrigger.nextExecTime}</td>
-              <td class="property-key">Has Dependency</td>
+              <td class="property-key">是否有依赖</td>
               <td class="property-value-half">
                 {?flowtrigger.dependencies}
-                  true
+                  是
                 {:else}
-                  false
+                  否
                 {/flowtrigger.dependencies}
                 <div class="pull-right">
                   <button type="button" id="showFlowTrigger" data-toggle="modal"
-                          class="btn btn-sm btn-info" data-target="#dependencyList">Show Dependency
+                          class="btn btn-sm btn-info" data-target="#dependencyList">查看依赖
                   </button>
                 </div>
 
@@ -145,13 +145,13 @@
                       <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="dependencyLabel">Dependencies</h4>
+                        <h4 class="modal-title" id="dependencyLabel">依赖</h4>
                       </div>
                       <div class="modal-body">
                         <pre>{flowtrigger.dependencies}</pre>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                         </button>
                       </div>
                     </div>
@@ -164,13 +164,13 @@
           </table>
         {:else}
           <div class="callout callout-default">
-            <h4>None</h4>
-            <p>This flow doesn't have flow trigger.</p>
+            <h4>无</h4>
+            <p>该工作流没有工作流触发器。</p>
           </div>
         {/flowtrigger}
 
       </div>
 
-      <h3>Last Run Stats</h3>
+      <h3>上次运行统计</h3>
     </div>
   </div>
