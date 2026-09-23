@@ -1,0 +1,107 @@
+name: azkaban-zh-llk-build
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: '要构建的当前仓库分支，例如 main、release3.90.0'
+        required: true
+        default: 'azkaban-3.90.0'
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 设置版本号
+        id: params
+        run: |
+          VERSION="3.90.0"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "版本号: $VERSION"
+
+      - name: 生成安全分支名
+        id: vars
+        env:
+          INPUT_BRANCH: ${{ inputs.branch }}
+        run: |
+          SAFE_BRANCH=$(echo "$INPUT_BRANCH" | sed 's#[^A-Za-z0-9._-]#-#g')
+          echo "safe_branch=$SAFE_BRANCH" >> $GITHUB_OUTPUT
+          echo "SAFE_BRANCH=$SAFE_BRANCH" >> $GITHUB_ENV
+          echo "构建分支: $INPUT_BRANCH"
+          echo "安全分支名: $SAFE_BRANCH"
+
+      - name: 检出当前仓库指定分支
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+          fetch-depth: 0
+
+      - name: 设置 JDK 8
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+          cache: 'gradle'
+          cache-dependency-path: |
+            **/*.gradle*
+            **/gradle-wrapper.properties
+
+      - name: 修改构建配置
+        env:
+          VERSION: ${{ steps.params.outputs.version }}
+        run: |
+          # 固定版本号
+          if ! grep -q "^version=" gradle.properties 2>/dev/null; then
+            echo "version=${VERSION}" >> gradle.properties
+          else
+            sed -i "s/^version=.*/version=${VERSION}/" gradle.properties
+          fi
+          sed -i '/^snapshotSuffix=/d' gradle.properties
+          echo "snapshotSuffix=" >> gradle.properties
+
+          # 禁用 semver-git
+          sed -i 's/^apply plugin: .com.cinnober.gradle.semver-git./\/\/ &/' build.gradle
+
+      - name: 执行 Gradle 构建
+        run: ./gradlew distTar --no-daemon
+
+      - name: 收集产物
+        run: |
+          mkdir -p artifacts
+          find . -path "*/build/distributions/*.tar.gz" -type f -exec cp {} artifacts/ \;
+          echo "独立包列表："
+          ls -lh artifacts/
+
+      - name: 打包总压缩包并生成 MD5
+        env:
+          VERSION: ${{ steps.params.outputs.version }}
+        run: |
+          cd artifacts
+          tar -czf "azkaban-${VERSION}.tar.gz" *.tar.gz
+          md5sum *.tar.gz > md5sum
+          echo "总包和校验文件已生成"
+
+      - name: 创建 Release 并上传附件
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: zh-${{ steps.params.outputs.version }}-${{ steps.vars.outputs.safe_branch }}
+          name: zh-${{ steps.params.outputs.version }}-${{ steps.vars.outputs.safe_branch }}
+          body: |
+            ## Azkaban ${{ steps.params.outputs.version }} 构建包（当前仓库分支：${{ inputs.branch }}）
+
+            - 构建分支：${{ inputs.branch }}
+            - 包含所有子模块的独立 tar.gz
+            - 总压缩包：azkaban-${{ steps.params.outputs.version }}.tar.gz
+            - MD5 校验文件：md5sum
+          files: |
+            artifacts/*.tar.gz
+            artifacts/md5sum
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
