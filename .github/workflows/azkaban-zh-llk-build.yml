@@ -68,7 +68,9 @@ jobs:
           sed -i 's/^apply plugin: .com.cinnober.gradle.semver-git./\/\/ &/' build.gradle
 
       - name: 执行 Gradle 构建
-        run: ./gradlew distTar --no-daemon
+        run: |
+          chmod +x gradlew
+          ./gradlew distTar --no-daemon
 
       - name: 收集产物
         run: |
